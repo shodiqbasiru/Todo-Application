@@ -18,6 +18,9 @@ const props = defineProps({
       </tr>
       </thead>
       <tbody>
+      <tr v-if="props.todos.length === 0">
+        <td class="border px-4 py-2 text-center" colspan="3">No data</td>
+      </tr>
       <tr v-for="(todo, index) in props.todos" :key="todo.id" class="text-center">
         <td class="border px-4 py-2">{{ index + 1 }}</td>
         <td class="border px-4 py-2">{{ todo.title }}</td>
@@ -29,7 +32,6 @@ const props = defineProps({
           {{ todo.completed ? "Completed" : "Uncompleted"}}
           </span>
         </td>
-
       </tr>
       </tbody>
     </table>

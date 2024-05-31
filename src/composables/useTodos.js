@@ -14,48 +14,61 @@ const useTodos = () => {
 
     const onSubmit = async (event) => {
         event.preventDefault();
+        if (!state.title) {
+            await Swal.fire({
+                title: 'Error',
+                text: 'Title is required',
+                icon: 'error',
+                confirmButtonText: 'Ok'
+            });
+            return;
+        }
         if (state.currentTodo.id) {
             const updatedTodo = {
                 id: state.currentTodo.id,
                 title: state.title,
                 completed: state.completed
             };
-            const index = state.todos.findIndex(todo => todo.id === updatedTodo.id);
-            state.todos[index] = updatedTodo;
-            state.form.formTitle = 'Create a new Todo';
-            state.form.button = 'Add Todo';
             await Swal.fire({
                 title: 'Success',
                 text: 'Todo updated successfully',
                 icon: 'success',
                 confirmButtonText: 'Ok'
             });
+
+            const index = state.todos.findIndex(todo => todo.id === updatedTodo.id);
+            state.todos[index] = updatedTodo;
+            state.form.formTitle = 'Create a new Todo';
+            state.form.button = 'Add Todo';
+
         } else {
             const todo = {
                 id: state.todos.length + 1,
                 title: state.title,
                 completed: state.completed
             };
-            state.todos.unshift(todo);
             await Swal.fire({
                 title: 'Success',
                 text: 'Todo created successfully',
                 icon: 'success',
                 confirmButtonText: 'Ok'
             });
+            state.todos.unshift(todo);
+
         }
         state.title = '';
         state.currentTodo = {id: 0, title: '', completed: false};
     }
 
     const deleteTodo = async (id) => {
-        state.todos = state.todos.filter(todo => todo.id !== id);
         await Swal.fire({
             title: 'Success',
             text: 'Todo deleted successfully',
             icon: 'success',
             confirmButtonText: 'Ok'
         });
+        state.todos = state.todos.filter(todo => todo.id !== id);
+
     }
 
 
@@ -81,11 +94,15 @@ const useTodos = () => {
         }
     }
 
-    const searchTodo = async () => {
+    const searchTodo = () => {
         if (state.search) {
-            state.todos = state.todos.filter(todo => todo.title.toLowerCase().includes(state.search.toLowerCase()));
+            const lowerCaseSearch = state.search.toLowerCase();
+            state.todos = state.todos.filter(todo => {
+                const lowerCaseTitle = todo.title.toLowerCase();
+                return lowerCaseTitle.includes(lowerCaseSearch);
+            });
         } else {
-            await getTodos();
+            getTodos();
         }
         state.currentPage = 1;
     }

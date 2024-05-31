@@ -1,5 +1,11 @@
-<script setup></script>
+<script setup>
+import NavigationBar from "@/layouts/NavigationBar.vue";
+</script>
 
 <template>
-<router-view/>
+  <NavigationBar/>
+  <main class="p-4">
+    <router-view/>
+  </main>
+
 </template>

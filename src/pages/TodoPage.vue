@@ -31,7 +31,9 @@ const onDeleteTodo = (id) => {
 
 <template>
   <div class="flex flex-col lg:flex-row items-start gap-x-4 justify-around">
-    <TodoFormComponent/>
+    <div class="flex flex-col w-full lg:w-1/3">
+      <TodoFormComponent/>
+    </div>
     <div class="flex flex-col w-full lg:w-2/3">
       <TodoCardComponent
           :todos="uncompletedTodos"

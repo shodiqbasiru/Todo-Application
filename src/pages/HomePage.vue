@@ -21,7 +21,7 @@ onMounted(() => {
 <template>
   <div class="px-14">
     <h1 class="text-2xl font-bold mb-4">Todo List</h1>
-    <div class="flex justify-between mb-4 items-center">
+    <div class="flex justify-between mb-4 items-center flex-wrap">
       <router-link to="/todo" class="bg-orange-500 hover:bg-orange-600 py-2 px-5 rounded text-white">
         <font-awesome-icon icon="plus" class="me-2"/>
         Create
