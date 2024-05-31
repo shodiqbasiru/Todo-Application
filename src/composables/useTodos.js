@@ -1,29 +1,15 @@
-import {computed, reactive} from "vue";
+import {computed} from "vue";
 import TodoService from "@/services/TodoService";
 import Swal from "sweetalert2";
-
-const state = reactive({
-    todos: [],
-    currentPage: 1,
-    itemsPerPage: 10,
-    title: '',
-    completed: false,
-    currentTodo:{},
-    form: {
-        formTitle: 'Create a new Todo',
-        button: 'Add Todo'
-    },
-    search: '',
-    filteredTodos: [],
-});
+import {todoStore} from "@/store/todoStore";
 
 const useTodos = () => {
     const todoService = TodoService();
+    const {state} = todoStore;
 
     const getTodos = async () => {
         const data = await todoService.getTodos();
         state.todos.push(...data);
-        state.filteredTodos = [...state.todos]; // Update filteredTodos when todos is updated
     }
 
     const onSubmit = async (event) => {
@@ -34,7 +20,6 @@ const useTodos = () => {
                 title: state.title,
                 completed: state.completed
             };
-            await todoService.updateTodo(updatedTodo.id, updatedTodo);
             const index = state.todos.findIndex(todo => todo.id === updatedTodo.id);
             state.todos[index] = updatedTodo;
             state.form.formTitle = 'Create a new Todo';
@@ -51,8 +36,7 @@ const useTodos = () => {
                 title: state.title,
                 completed: state.completed
             };
-            const newTodo = await todoService.createTodo(todo);
-            state.todos.unshift(newTodo);
+            state.todos.unshift(todo);
             await Swal.fire({
                 title: 'Success',
                 text: 'Todo created successfully',
@@ -61,11 +45,10 @@ const useTodos = () => {
             });
         }
         state.title = '';
-        state.currentTodo = { id: 0, title: '', completed: false };
+        state.currentTodo = {id: 0, title: '', completed: false};
     }
 
     const deleteTodo = async (id) => {
-        await todoService.deleteTodo(id);
         state.todos = state.todos.filter(todo => todo.id !== id);
         await Swal.fire({
             title: 'Success',
@@ -92,10 +75,18 @@ const useTodos = () => {
     const handleCompleted = (id) => {
         const todo = state.todos.find(todo => todo.id === id);
         todo.completed = !todo.completed;
+        if (todo.completed) {
+            state.todos = state.todos.filter(todo => todo.id !== id);
+            state.todos.unshift(todo);
+        }
     }
 
-    const searchTodo = () => {
-        state.filteredTodos = state.todos.filter(todo => todo.title.toLowerCase().includes(state.search.toLowerCase()));
+    const searchTodo = async () => {
+        if (state.search) {
+            state.todos = state.todos.filter(todo => todo.title.toLowerCase().includes(state.search.toLowerCase()));
+        } else {
+            await getTodos();
+        }
         state.currentPage = 1;
     }
 
@@ -110,22 +101,22 @@ const useTodos = () => {
     const dataPage = computed(() => {
         const start = (state.currentPage - 1) * state.itemsPerPage;
         const end = start + state.itemsPerPage;
-        return state.filteredTodos.slice(start, end);
+        return state.todos.slice(start, end);
     });
 
-    const totalPages= computed(() => {
-        return Math.ceil(state.filteredTodos.length / state.itemsPerPage);
+    const totalPages = computed(() => {
+        return Math.ceil(state.todos.length / state.itemsPerPage);
     });
 
     return {
         data: state,
-        computed: { dataPage, uncompletedTodos, completedTodos,totalPages },
+        computed: {dataPage, uncompletedTodos, completedTodos, totalPages},
         methods: {
             getTodos,
             onSubmit,
             onPageChanged,
             deleteTodo,
-            handleCompleted ,
+            handleCompleted,
             setCurrentTodo,
             searchTodo
         }

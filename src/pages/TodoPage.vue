@@ -30,20 +30,22 @@ const onDeleteTodo = (id) => {
 </script>
 
 <template>
-  <TodoFormComponent/>
-  <div class="flex flex-col items-center">
-    <TodoCardComponent
-        :todos="uncompletedTodos"
-        title="Uncompleted Todo List"
-        @completeTodo="changeComplete"
-        @edit-todo="onEditTodo"
-        @delete-todo="onDeleteTodo"/>
+  <div class="flex flex-col lg:flex-row items-start gap-x-4 justify-around">
+    <TodoFormComponent/>
+    <div class="flex flex-col w-full lg:w-2/3">
+      <TodoCardComponent
+          :todos="uncompletedTodos"
+          title="Uncompleted Todo List"
+          @completeTodo="changeComplete"
+          @edit-todo="onEditTodo"
+          @delete-todo="onDeleteTodo"/>
 
-    <TodoCardComponent
-        :todos="completedTodos"
-        title="Completed Todo List"
-        @edit-todo="onEditTodo"
-        @delete-todo="onDeleteTodo"/>
+      <TodoCardComponent
+          :todos="completedTodos"
+          title="Completed Todo List"
+          @edit-todo="onEditTodo"
+          @delete-todo="onDeleteTodo"/>
+    </div>
   </div>
 </template>
 

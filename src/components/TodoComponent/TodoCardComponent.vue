@@ -1,5 +1,5 @@
 <script setup>
-import { defineProps, defineEmits } from "vue";
+import {defineProps, defineEmits} from "vue";
 import CardComponent from "@/components/CardComponent.vue";
 import {FontAwesomeIcon} from "@fortawesome/vue-fontawesome";
 
@@ -30,11 +30,18 @@ const onCompleteTodo = (id) => {
     </template>
     <template #content>
       <div v-for="(todo, index) in props.todos" :key="todo.id">
-        <div class="flex items-center bg-white mb-8 py-5 rounded">
-          <div class="w-1/4 px-4 py-2">{{ index + 1 }}</div>
-          <div class="w-1/2 px-4 py-2">{{ todo.title }}</div>
-          <div class="w-1/4 px-4 py-2">{{ todo.completed }}</div>
-          <div class="w-1/4 px-4 py-2 flex gap-x-4">
+        <div class="flex flex-col sm:flex-row items-start sm:items-center bg-white mb-8 p-5 rounded">
+          <div class="w-full md:w-1/12 mb-4 sm:mb-0">{{ index + 1 }}</div>
+          <div class="w-full md:w-1/2 mb-4 sm:mb-0">{{ todo.title }}</div>
+          <div class="w-full md:w-1/4 mb-4 sm:mb-0">
+            <span :class="{
+            'bg-green-500 text-white': todo.completed,
+            'bg-red-500 text-white': !todo.completed
+          }" class=" py-1 px-3  rounded-lg">
+          {{ todo.completed ? "Completed" : "Uncompleted" }}
+          </span>
+          </div>
+          <div class="w-full sm:w-1/4 flex gap-x-4">
             <button @click="onEditTodo(todo)"
                     class="bg-yellow-400 hover:bg-yellow-600 text-white font-bold py-2 px-4 rounded">
               <FontAwesomeIcon icon="edit"/>
@@ -53,9 +60,4 @@ const onCompleteTodo = (id) => {
       </div>
     </template>
   </CardComponent>
-
 </template>
-
-<style scoped>
-
-</style>
