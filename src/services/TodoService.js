@@ -2,8 +2,8 @@ import axiosInstance from "@/api/AxiosInstance";
 
 const TodoService = () => {
     const getTodos = async () => {
-        const response = await axiosInstance.get("/todos")
-        return response.data;
+        const {data} = await axiosInstance.get("/todos")
+        return data;
     }
 
     return {
