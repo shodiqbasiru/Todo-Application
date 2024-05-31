@@ -1,8 +1,12 @@
 <script setup>
-import HomePage from "@/pages/HomePage.vue";
+import NavigationBar from "@/layouts/NavigationBar.vue";
+import Footer from "@/layouts/FooterLayout.vue";
 </script>
 
 <template>
-  <HomePage />
-
+    <NavigationBar/>
+    <main class="p-4">
+      <router-view/>
+    </main>
+    <Footer/>
 </template>
