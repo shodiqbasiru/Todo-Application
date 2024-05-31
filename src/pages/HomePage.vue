@@ -19,7 +19,7 @@ onMounted(() => {
 </script>
 
 <template>
-  <div class="px-14">
+  <div class="px-14 min-h-screen">
     <h1 class="text-2xl font-bold mb-4">Todo List</h1>
     <div class="flex justify-between mb-4 items-center flex-wrap">
       <router-link to="/todo" class="bg-orange-500 hover:bg-orange-600 py-2 px-5 rounded text-white">
