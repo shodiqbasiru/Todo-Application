@@ -1,7 +1,6 @@
 <script setup>
 import TodoListComponent from "@/components/TodoComponent/TodoListComponent.vue";
 import PaginationComponent from "@/components/PaginationComponent.vue";
-import {onMounted} from "vue";
 import {FontAwesomeIcon} from "@fortawesome/vue-fontawesome";
 import useTodos from "@/composables/useTodos";
 
@@ -11,10 +10,7 @@ const {
   methods: {getTodos, onPageChanged, searchTodo}
 } = useTodos();
 
-
-onMounted(() => {
-  getTodos()
-});
+getTodos()
 
 </script>
 
@@ -28,7 +24,7 @@ onMounted(() => {
       </router-link>
       <div>
         <input type="text" class="border border-gray-300 rounded-s px-4 py-2 outline-orange-500"
-               placeholder="Search Todo" @input="searchTodo" v-model="data.search"/>
+               placeholder="Search Todo" @keyup.enter="searchTodo" v-model="data.search"/>
         <button class="bg-orange-500 hover:bg-orange-600 px-4 py-2 rounded-e text-white">
           <font-awesome-icon icon="search" class="me-2"/>
         </button>

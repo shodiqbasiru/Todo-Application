@@ -8,8 +8,12 @@ const useTodos = () => {
     const {state} = todoStore;
 
     const getTodos = async () => {
+        if (state.isFetched) return;
+
         const data = await todoService.getTodos();
         state.todos.push(...data);
+
+        state.isFetched = true;
     }
 
     const onSubmit = async (event) => {
@@ -94,15 +98,18 @@ const useTodos = () => {
         }
     }
 
-    const searchTodo = () => {
+    const searchTodo = async () => {
         if (state.search) {
+            console.log(state.isFetched, 'if search')
             const lowerCaseSearch = state.search.toLowerCase();
             state.todos = state.todos.filter(todo => {
                 const lowerCaseTitle = todo.title.toLowerCase();
                 return lowerCaseTitle.includes(lowerCaseSearch);
             });
         } else {
-            getTodos();
+            state.isFetched = false;
+            await getTodos();
+
         }
         state.currentPage = 1;
     }

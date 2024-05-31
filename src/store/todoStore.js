@@ -13,5 +13,6 @@ export const todoStore = {
             button: 'Add Todo'
         },
         search: '',
+        isFetched: false
     }),
 }
