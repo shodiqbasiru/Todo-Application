@@ -65,12 +65,12 @@ const lastPage = computed(() => {
 </script>
 
 <template>
-  <div class="flex flex-col items-center justify-center">
+  <div class="flex flex-col items-center justify-center mt-4">
     <div class="flex gap-4">
       <button @click="onClickFirstPage" :disabled="firstPage" class="bg-blue-500 text-white p-2 rounded" :class="{ 'bg-gray-500 text-gray-200': firstPage }">First</button>
       <button @click="onClickPreviousPage" :disabled="firstPage" class="bg-blue-500 text-white p-2 rounded" :class="{ 'bg-gray-500 text-gray-200': firstPage }">Previous</button>
       <template v-for="page in pages" :key="page">
-        <button v-if="page <= totalPages" @click="onClickPage(page)" :class="{ 'bg-blue-500 text-white': page === currentPage }" class="p-2 rounded">{{ page }}
+        <button v-if="page <= totalPages" @click="onClickPage(page)" :class="{ 'bg-blue-500 text-white': page === currentPage }" class="p-2 px-4 rounded border">{{ page }}
         </button>
       </template>
       <button @click="onClickNextPage" :disabled="lastPage" class="bg-blue-500 text-white p-2 rounded" :class="{ 'bg-gray-500 text-gray-200': lastPage }">Next</button>

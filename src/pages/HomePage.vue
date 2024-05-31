@@ -1,37 +1,42 @@
 <script setup>
-import TodoListComponent from "@/components/TodoListComponent.vue";
+import TodoListComponent from "@/components/TodoComponent/TodoListComponent.vue";
 import PaginationComponent from "@/components/PaginationComponent.vue";
-import TodoService from "@/services/TodoService";
-import {onMounted, ref, computed} from "vue";
+import useTodos from "@/composables/useTodos";
+import {onMounted} from "vue";
+import {FontAwesomeIcon} from "@fortawesome/vue-fontawesome";
 
-const data = ref([]);
-const currentPage = ref(1);
-const itemsPerPage = ref(10);
-const todoService = TodoService();
+const {
+  data,
+  computed: {dataPage, totalPages},
+  methods: {getTodos, onPageChanged,searchTodo}
+} = useTodos();
 
-onMounted(async () => {
-  data.value = await todoService.getTodos();
+
+onMounted(() => {
+  getTodos()
 });
-
-const todos = computed(() => {
-  const start = (currentPage.value - 1) * itemsPerPage.value;
-  const end = start + itemsPerPage.value;
-  return data.value.slice(start, end);
-});
-
-const onPageChanged = (newPage) => {
-  currentPage.value = newPage;
-};
 
 </script>
 
 <template>
-  <router-link to="/todo" class="bg-blue-500 text-white p-4 rounded">Create Todo</router-link>
-  <TodoListComponent :todos="todos"/>
+  <h1 class="text-2xl font-bold mb-4">Todo List</h1>
+  <div class="flex justify-between mb-4 items-center">
+    <router-link to="/todo" class="bg-orange-500 hover:bg-orange-600 py-2 px-5 rounded text-white">
+      <font-awesome-icon icon="plus" class="me-2"/>
+      Create
+    </router-link>
+    <div>
+      <input type="text" class="border border-gray-300 rounded-s px-4 py-2 outline-orange-500" placeholder="Search Todo" @input="searchTodo" v-model="data.search"/>
+      <button class="bg-orange-500 hover:bg-orange-600 px-4 py-2 rounded-e text-white">
+        <font-awesome-icon icon="search" class="me-2"/>
+      </button>
+    </div>
+  </div>
+  <TodoListComponent :todos="dataPage"/>
   <PaginationComponent
-      :currentPage="currentPage"
-      :totalPages="Math.ceil(data.length / itemsPerPage)"
-      :perPage="itemsPerPage"
+      :currentPage="data.currentPage"
+      :totalPages="totalPages"
+      :perPage="data.itemsPerPage"
       :maxVisibleButtons="5"
       @page-changed="onPageChanged"/>
 </template>
